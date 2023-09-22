@@ -1,1 +1,40 @@
-(format: oORemOo/TASK1)
+name: Deploy to Firebase Hosting
+
+on:
+  push:
+    branches:
+      - main # หรือชื่อ branch ที่คุณต้องการใช้
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14
+
+    - name: Install Firebase CLI
+      run: npm install -g firebase-tools
+
+    - name: Authenticate with Firebase
+      run: firebase login:ci
+
+    - name: Build and deploy
+      run: |
+        npm install # หากคุณใช้ npm
+        # หรือ
+        # yarn install # หากคุณใช้ yarn
+        # สคริปต์สำหรับการสร้างและอัปโหลดไฟล์ Firebase Hosting
+        # เช่น 'npm run build' หรือ 'yarn build' และ 'firebase deploy --only hosting'
+        # โปรดแทนคำสั่งนี้ด้วยคำสั่งที่คุณใช้เพื่อสร้างและอัปโหลดไฟล์ของ Firebase Hosting ของคุณ
+
+    - name: Deploy to Firebase Hosting
+      run: |
+        firebase use --token ${{ secrets.FIREBASE_TOKEN }}
+        # หากคุณมีหลายโปรเจกต์ Firebase คุณอาจต้องใช้คำสั่ง 'firebase use --token' เพื่อเลือกโปรเจกต์ที่คุณต้องการ
+        firebase deploy --only hosting --token ${{ secrets.FIREBASE_TOKEN }}
